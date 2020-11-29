@@ -19,7 +19,7 @@ class SignUp extends React.Component {
 
         //spinner表示開始
         if (this._isMounted) this.setState({ loading: true });
-        
+
         //新規登録処理
         firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
             .then(res => {
@@ -50,19 +50,20 @@ class SignUp extends React.Component {
                 <div className="mx-auto" style={{ width: 400, background: '#eee', padding: 20, marginTop: 60 }}>
                     <p style={{ textAlign: 'center' }}>新規登録</p>
                     <Formik
-                        initialValues={{ email: '', password: '', tel: '' }}
+                        initialValues={{ email: '', password: '', passwordConfirm: '', tel: '' }}
                         onSubmit={(values) => this.handleOnSubmit(values)}
                         validationSchema={Yup.object().shape({
-                            email: Yup.string().email().required(),
-                            password: Yup.string().required(),
-                            tel: Yup.string().required(),
+                            email: Yup.string().email('メールアドレスの形式ではありません。').required('必須項目です。'),
+                            password: Yup.string().required('必須項目です。').min(6, 'パスワードは最低6文字です。'),
+                            passwordConfirm: Yup.string().required('必須項目です。').oneOf([Yup.ref('password')], 'passwordが一致しません。').min(6, 'パスワードは最低6文字です。'),
+                            tel: Yup.string().required('必須項目です。'),
                         })}
                     >
                         {
                             ({ handleSubmit, handleChange, handleBlur, values, errors, touched }) => (
                                 <Form onSubmit={handleSubmit}>
                                     <FormGroup>
-                                        <Label for="name">Email</Label>
+                                        <Label for="name">メールアドレス</Label>
                                         <Input
                                             type="email"
                                             name="email"
@@ -71,13 +72,14 @@ class SignUp extends React.Component {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             invalid={touched.email && errors.email ? true : false}
+                                            placeholder="メールアドレスを入力"
                                         />
                                         <FormFeedback>
                                             {errors.email}
                                         </FormFeedback>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="password">Password</Label>
+                                        <Label for="password">パスワード</Label>
                                         <Input
                                             type="password"
                                             name="password"
@@ -86,13 +88,30 @@ class SignUp extends React.Component {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             invalid={touched.password && errors.password ? true : false}
+                                            placeholder="パスワードを入力"
                                         />
                                         <FormFeedback>
                                             {errors.password}
                                         </FormFeedback>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="tel">Tel</Label>
+                                        <Label for="passwordConfirm">パスワード確認</Label>
+                                        <Input
+                                            type="password"
+                                            name="passwordConfirm"
+                                            id="passwordConfirm"
+                                            value={values.passwordConfirm}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            invalid={touched.passwordConfirm && errors.passwordConfirm ? true : false}
+                                            placeholder="パスワードを入力"
+                                        />
+                                        <FormFeedback>
+                                            {errors.passwordConfirm}
+                                        </FormFeedback>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="tel">電話番号</Label>
                                         <Input
                                             type="tel"
                                             name="tel"
