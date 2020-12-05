@@ -8,6 +8,8 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
+import Register from './screens/Register';
+import ResetPassword from './screens/ResetPassword';
 
 import Auth from './Auth';
 
@@ -17,6 +19,8 @@ function App() {
       <Switch>
         <Route exact path="/signin" component={SignIn} />
         <Route exact path="/signup" component={SignUp} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/reset_password" component={ResetPassword} />
         {/* 以下認証のみ */}
         <Auth>
           <Switch>

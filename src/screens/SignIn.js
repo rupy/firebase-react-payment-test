@@ -23,6 +23,16 @@ class SignIn extends React.Component {
                 this.props.history.push("/");
                 if (this._isMounted) this.setState({ loading: false });
             })
+            .then(res => {
+                var user = firebase.auth().currentUser;
+
+                user.sendEmailVerification().then(function() {
+                // 成功した際の処理
+                }).catch(function(error) {
+                    if (this._isMounted) this.setState({ loading: false });
+                    alert(error);                
+                });
+            })
             .catch(error => {
                 //異常終了時
                 if (this._isMounted) this.setState({ loading: false });
@@ -56,7 +66,7 @@ class SignIn extends React.Component {
                             ({ handleSubmit, handleChange, handleBlur, values, errors, touched }) => (
                                 <Form onSubmit={handleSubmit}>
                                     <FormGroup>
-                                        <Label for="email">Email</Label>
+                                        <Label for="email">メール</Label>
                                         <Input
                                             type="email"
                                             name="email"
@@ -71,7 +81,7 @@ class SignIn extends React.Component {
                                         </FormFeedback>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="password">Password</Label>
+                                        <Label for="password">パスワード</Label>
                                         <Input
                                             type="password"
                                             name="password"
@@ -97,7 +107,8 @@ class SignIn extends React.Component {
                     </Formik>
                 </div>
                 <div className="mx-auto" style={{ width: 400, background: '#fff', padding: 20 }}>
-                    <Link to="/signup">新規登録はこちら。</Link>
+                    <p>新規登録は<Link to="/signup">こちら</Link>。</p>
+                    <p>パスワードの再発行は<Link to="/reset_password">こちら</Link>。</p>
                 </div>
             </div>
         );

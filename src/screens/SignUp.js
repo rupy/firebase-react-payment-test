@@ -24,10 +24,12 @@ class SignUp extends React.Component {
         firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
             .then(res => {
                 //正常終了時
+                const user = firebase.auth().currentUser;
+                if (!user.emailVerified) user.sendEmailVerification();        
                 //spinner表示終了
                 if (this._isMounted) this.setState({ loading: false });
-                //Homeに移動
-                this.props.history.push("/"); //history.pushを使うためwithRouterしている
+                //Registerに移動
+                this.props.history.push("/register"); //history.pushを使うためwithRouterしている
             })
             .catch(error => {
                 //異常終了時
@@ -137,7 +139,7 @@ class SignUp extends React.Component {
                     </Formik>
                 </div>
                 <div className="mx-auto" style={{ width: 400, background: '#fff', padding: 20 }}>
-                    <Link to="/signin">ログインはこちら。</Link>
+                    <p>ログインは<Link to="/signin">こちら</Link>。</p>
                 </div>
 
             </div>
