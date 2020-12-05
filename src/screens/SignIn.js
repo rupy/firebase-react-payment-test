@@ -58,8 +58,8 @@ class SignIn extends React.Component {
                         initialValues={{ email: '', password: '' }}
                         onSubmit={(values) => this.handleOnSubmit(values)}
                         validationSchema={Yup.object().shape({
-                            email: Yup.string().email().required(),
-                            password: Yup.string().required(),
+                            email: Yup.string().email('メールアドレスの形式ではありません。').required('必須項目です。'),
+                            password: Yup.string().required('必須項目です。').min(6, 'パスワードは最低6文字です。'),
                         })}
                     >
                         {
