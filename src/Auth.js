@@ -1,69 +1,32 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Redirect } from 'react-router-dom';
 import firebase from './Firebase';
 import LoadingOverlay from 'react-loading-overlay';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-class Auth extends React.Component {
+const Auth = (props) => {
 
-    state = {
-        signinCheck: false, //ログインチェックが完了してるか
-        signedIn: false, //ログインしてるか
+    const [user, initialising, error] = useAuthState(firebase.auth());
+    //チェックが終わってないなら（ローディング表示）
+    if (initialising) {
+        return (
+            <LoadingOverlay
+                active={true}
+                spinner
+                text='ロード中...'
+            >
+                <div style={{ height: '100vh', width: '100vw' }}></div>
+            </ LoadingOverlay>
+        );
     }
 
-    _isMounted = false; //unmountを判断（エラー防止用）
-
-    componentDidMount = () => {
-        //mountされてる
-        this._isMounted = true;
-
-        //ログインしてるかどうかチェック
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                //してる
-                if (this._isMounted) {
-                    this.setState({
-                        signinCheck: true,
-                        signedIn: true,
-                    });
-                }
-            } else {
-                //してない
-                if (this._isMounted) {
-                    this.setState({
-                        signinCheck: true,
-                        signedIn: false,
-                    });
-                }
-            }
-        })
-    }
-
-    componentWillUnmount = () => {
-        this._isMounted = false;
-    }
-
-    render() {
-        //チェックが終わってないなら（ローディング表示）
-        if (!this.state.signinCheck) {
-            return (
-                <LoadingOverlay
-                    active={true}
-                    spinner
-                    text='Loading...'
-                >
-                    <div style={{ height: '100vh', width: '100vw' }}></div>
-                </ LoadingOverlay>
-            );
-        }
-
-        //チェックが終わりかつ
-        if (this.state.signedIn) {
-            //サインインしてるとき（そのまま表示）
-            return this.props.children;
-        } else {
-            //してないとき（ログイン画面にリダイレクト）
-            return <Redirect to="/signin" />
-        }
+    //チェックが終わりかつ
+    if (user) {
+        //サインインしてるとき（そのまま表示）
+        return props.children;
+    } else {
+        //してないとき（ログイン画面にリダイレクト）
+        return <Redirect to="/signin" />
     }
 }
 
