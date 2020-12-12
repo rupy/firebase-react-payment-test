@@ -14,6 +14,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Link from '@material-ui/core/Link';
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -21,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  titleLink: {
+    '&:hover': {
+        color: "#fff",
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -177,7 +184,7 @@ const Header = () => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Payment Test
+            <Link href="/" color="inherit" className={classes.titleLink}> Matching Site</Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
