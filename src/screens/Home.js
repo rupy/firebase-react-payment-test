@@ -11,7 +11,7 @@ const Home = () => {
 
     return (
         <div className="container">
-            <p>Home</p>
+            <h1>Home</h1>
             <Link to="/profile">Profileへ</Link>
             <br />
             <br />
